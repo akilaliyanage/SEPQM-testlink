@@ -12,6 +12,7 @@ class  ThriftyRentSystem{
 	//cars and vans are two collections used to store cars of type Cars and vans of type Vans respectively
     private Car cars[] = new Car[50];
     private Van vans[] = new Van[50];
+    Vehicle vehi;
 
 	public static DateFormat format = new SimpleDateFormat("dd/MM/yyyy"); //Basic format expected from the User
 
@@ -37,7 +38,7 @@ class  ThriftyRentSystem{
 
 			switch (choice) {
 				case 1:
-					this.add(sc); //Method used to add either cars or vans
+					//this.add(null,null,null,null,null,null); //Method used to add either cars or vans
 					break;
 				case 2:
 					this.rent(sc); //Method used to rent either cars or vans
@@ -68,22 +69,25 @@ class  ThriftyRentSystem{
 	 * @param //Scanner variable
 	 * @return adds either car or van if the details are correct
 	 */
-    private void add(Scanner scan)
+    public String add(String type,int Manyear,String Manmake,String Manmodel,String id,int Manseats)
     {
+		
+		
+    	Scanner scan= new Scanner(System.in);
 		int i=0;
+		int seats = 0;
 		String vehicleID="";
-		int seats=0;
 		String maintenanceDate=null;
 		int perDayRent=0;
 		System.out.print("Vehicle Type(Van or Car): ");
-		String vehicleType = scan.nextLine();
+		String vehicleType = type;
 		while (!(vehicleType.equalsIgnoreCase("car") ||vehicleType.equalsIgnoreCase("van")))
 		{
 			System.out.print("Please enter either van or car: ");
 			vehicleType = scan.nextLine();
 		}
 		System.out.print("Year: ");
-		int year = Integer.parseInt(scan.nextLine());
+		int year = Manyear;
 		while (year<0 || year >2019)
 		{
 			System.out.println("Please enter a valid year");
@@ -91,13 +95,13 @@ class  ThriftyRentSystem{
 		}
 
 		System.out.print("Make: ");
-		String make = scan.nextLine();
+		String make = Manmake;
 		System.out.print("Model: ");
-		String model = scan.nextLine();
+		String model = Manmodel;
 
 		if(vehicleType.equals("car")) {
 			System.out.print("Vehicle ID: C_");
-			vehicleID = scan.nextLine();
+			vehicleID = id;
 			vehicleID = "C_"+vehicleID;
 			if(this.cars[0]!=null && vehicleID.contains("C_"))
 			{
@@ -105,12 +109,12 @@ class  ThriftyRentSystem{
 					if ((this.cars[i].getVehicleId()).equals(vehicleID))
 					{
 						System.out.println("ID Already used, Please add a new vehicle");
-						return;
+						
 					}
 				}
 			}
 			System.out.print("Number of seats: ");
-			seats = Integer.parseInt(scan.nextLine());
+			seats = Manseats;
 			while ((seats != 4 && seats != 7)) {
 				System.out.println("Please enter seats as either 4 or 7");
 				seats = Integer.parseInt(scan.nextLine());
@@ -118,6 +122,7 @@ class  ThriftyRentSystem{
 			if(i<50){
 				Vehicle newVehicle= new Car(vehicleID,year,make,model,0,new VehicleType(seats));
 				this.cars[i]= (Car) newVehicle;
+				vehi = newVehicle;
 				System.out.println(newVehicle.toString());
 			}
 		}
@@ -132,7 +137,7 @@ class  ThriftyRentSystem{
 					if ((this.vans[i].getVehicleId()).equals(vehicleID))
 					{
 						System.out.println("ID Already used, Please add a new vehicle");
-						return;
+						
 					}
 				}
 			}
@@ -150,9 +155,12 @@ class  ThriftyRentSystem{
 			if(i<50){
 				Vehicle newVehicle= new Van(vehicleID,year,make,model,0,new VehicleType(seats,Lastmain));
 				this.vans[i]= (Van) newVehicle;
+				vehi = newVehicle;
 				System.out.println(newVehicle.toString());
 			}
 		}
+		
+		return vehi.toString();
 
 
     }
